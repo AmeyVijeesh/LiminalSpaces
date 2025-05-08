@@ -1,0 +1,295 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap');
+
+.videoo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+}
+
+/* home.css - Add this to your styles/home.css file */
+
+:root {
+  --yellow-tint: rgba(245, 222, 179, 0.05);
+  --text-shadow: 0 0 2px rgba(240, 240, 200, 0.7);
+  --glitch-shadow: 0 0 3px rgba(255, 0, 0, 0.5), 0 0 5px rgba(72, 72, 255, 0.5);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: 'Space Mono', monospace;
+}
+
+.videoo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.85;
+  filter: contrast(1.1) brightness(0.85) sepia(0.1);
+}
+
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.1'/%3E%3C/svg%3E");
+  opacity: 0.12;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.hero-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #f5f5dc;
+  mix-blend-mode: difference;
+  z-index: 2;
+  transition: text-shadow 0.3s ease;
+}
+
+.liminal-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 4.5rem;
+  letter-spacing: 0.15em;
+  margin-bottom: 0.5rem;
+  color: #f0f0e0;
+  font-weight: 400;
+  position: relative;
+}
+
+.liminal-subtitle {
+  font-family: 'Space Mono', monospace;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+  text-shadow: var(--text-shadow);
+  color: rgba(72, 72, 255, 0.5);
+}
+
+.liminal-text-section {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  border: none;
+  overflow: hidden;
+}
+
+.text-container {
+  max-width: 80%;
+  padding: 2rem;
+  background-color: var(--yellow-tint);
+  border: 1px solid rgba(245, 222, 179, 0.1);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.text-container:hover {
+  transform: scale(1.01);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.liminal-heading {
+  font-family: 'Orbitron', monospace;
+  font-size: 3rem;
+  letter-spacing: 0.1em;
+  color: #f0f0e0;
+  text-shadow: var(--text-shadow);
+  margin-bottom: 1.5rem;
+  font-weight: 400;
+  text-align: center;
+}
+
+.liminal-paragraph {
+  font-family: 'Space Mono', monospace;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #d0d0c0;
+  text-shadow: var(--text-shadow);
+  max-width: 600px;
+  margin: 0 auto;
+  letter-spacing: 0.05em;
+}
+.liminal-photo {
+  opacity: 0;
+  filter: blur(10px);
+  transition: filter 0.3s ease, opacity 0.3s ease;
+  will-change: filter, opacity;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  display: block;
+  margin: 0 auto;
+}
+
+.floating-text-section {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.floating-text {
+  font-family: 'VT323', monospace;
+  font-size: 2.5rem;
+  color: rgba(240, 240, 220, 0.7);
+  text-shadow: var(--text-shadow);
+  letter-spacing: 0.1em;
+  animation: float 6s ease-in-out infinite;
+  position: relative;
+  text-align: center;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+.end-image-container {
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+}
+
+.end-image-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid yellow;
+}
+
+.end-image-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10%;
+  flex-direction: column;
+}
+
+.liminal-end-img {
+  height: 45vh;
+  width: 65vh;
+  object-fit: cover;
+  margin: 5%;
+  flex-shrink: 0;
+}
+
+.glitch {
+  animation: glitch-effect 0.3s infinite;
+}
+
+.text-glitch {
+  position: relative;
+}
+
+.text-glitch::before,
+.text-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+.text-glitch::before {
+  left: 2px;
+  text-shadow: -2px 0 #ff0000;
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch-anim 5s infinite linear alternate-reverse;
+}
+
+.text-glitch::after {
+  left: -2px;
+  text-shadow: -2px 0 #00ff00;
+  clip: rect(24px, 450px, 100px, 0);
+  animation: glitch-anim2 5s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-effect {
+  0% {
+    text-shadow: var(--text-shadow);
+    transform: translate(0);
+  }
+  25% {
+    text-shadow: var(--glitch-shadow);
+    transform: translate(-1px, 1px);
+  }
+  50% {
+    text-shadow: var(--text-shadow);
+    transform: translate(1px, -1px);
+  }
+  75% {
+    text-shadow: var(--glitch-shadow);
+    transform: translate(-1px, -1px);
+  }
+  100% {
+    text-shadow: var(--text-shadow);
+    transform: translate(0);
+  }
+}
+
+@keyframes glitch-anim {
+  0% {
+    clip: rect(65px, 9999px, 119px, 0);
+  }
+  20% {
+    clip: rect(79px, 9999px, 36px, 0);
+  }
+  40% {
+    clip: rect(27px, 9999px, 141px, 0);
+  }
+  60% {
+    clip: rect(83px, 9999px, 151px, 0);
+  }
+  80% {
+    clip: rect(15px, 9999px, 176px, 0);
+  }
+  100% {
+    clip: rect(42px, 9999px, 113px, 0);
+  }
+}
+
+@keyframes glitch-anim2 {
+  0% {
+    clip: rect(17px, 9999px, 38px, 0);
+  }
+  20% {
+    clip: rect(36px, 9999px, 73px, 0);
+  }
+  40% {
+    clip: rect(81px, 9999px, 134px, 0);
+  }
+  60% {
+    clip: rect(19px, 9999px, 153px, 0);
+  }
+  80% {
+    clip: rect(65px, 9999px, 113px, 0);
+  }
+  100% {
+    clip: rect(51px, 9999px, 159px, 0);
+  }
+}
