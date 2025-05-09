@@ -244,29 +244,35 @@ const Home = () => {
             </section>
           );
         })}{' '}
-        <section style={{ height: '600vh' }}></section>
-        <section
-          style={{
-            height: '1200vh',
-            position: 'relative',
-            border: '10px dotted pink',
-          }}
-        >
-          <div className="end-image-wrapper" ref={imageWrapperRef}>
-            <div className="end-image-row">
-              <img
-                src="https://i.ytimg.com/vi/fiO69UzTWxg/maxresdefault.jpg"
-                alt=""
-                className="liminal-end-img"
-              />
+        <section style={{ height: '500vh' }}></section>
+        <section>
+          <div className="dream-notes">
+            <div className="dream-note left">
+              <p>
+                I hate my life man please i wanna die im a coward i cant do this
+                anymore please fuck my fucking life.
+              </p>
             </div>
-            <div className="end-image-row">
+            <div className="dream-note right">
               {' '}
-              <img
-                src="https://preview.redd.it/took-this-pic-yesterday-and-thought-it-was-kinda-liminal-v0-w1el4015e1ye1.jpeg?width=1080&crop=smart&auto=webp&s=4de818e8a91c4b22dbbe238f94934469d9809a18"
-                alt=""
-                className="liminal-end-img"
-              />
+              <p>
+                I hate my life man please i wanna die im a coward i cant do this
+                anymore please fuck my fucking life.
+              </p>
+            </div>{' '}
+            <div className="dream-note left">
+              {' '}
+              <p>
+                I hate my life man please i wanna die im a coward i cant do this
+                anymore please fuck my fucking life.
+              </p>
+            </div>
+            <div className="dream-note right">
+              {' '}
+              <p>
+                I hate my life man please i wanna die im a coward i cant do this
+                anymore please fuck my fucking life.
+              </p>
             </div>
           </div>
         </section>

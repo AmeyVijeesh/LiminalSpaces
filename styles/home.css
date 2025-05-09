@@ -293,3 +293,27 @@ body {
     clip: rect(51px, 9999px, 159px, 0);
   }
 }
+
+.dream-notes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+}
+
+.dream-note {
+  width: 50vh;
+  height: 50vh;
+  background-color: #ddc972;
+  font-family: 'Courier New', Courier, monospace;
+  margin: 10%;
+}
+
+.dream-note .right {
+  text-align: right;
+}
+
+.dream-note .left {
+  text-align: left;
+}
