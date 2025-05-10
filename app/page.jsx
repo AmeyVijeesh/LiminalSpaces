@@ -302,7 +302,6 @@ const Home = () => {
         <source src="/output1.mp4" type="video/mp4" />
       </video>
 
-      {/* Noise overlay */}
       <div className="noise-overlay"></div>
 
       <div

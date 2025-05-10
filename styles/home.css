@@ -301,7 +301,7 @@ body {
 .dream-note {
   max-width: 500px;
   background: rgba(255, 231, 199, 0.1);
-  color: #1c1c1c;
+  color: #fff;
   animation: float 6s ease-in-out infinite;
   border: 1px solid rgba(255, 255, 255, 0.12);
   padding: 2.5rem;
@@ -374,7 +374,7 @@ body {
   font-size: 1rem;
   letter-spacing: 0.2em;
   margin-bottom: 1.2rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.3);
   text-transform: uppercase;
 }
 
@@ -437,7 +437,6 @@ body {
   z-index: 0;
 }
 
-/* Memory trails effect */
 .memory-trail {
   position: absolute;
   width: 1px;
