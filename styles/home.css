@@ -10,19 +10,12 @@
   z-index: -1;
 }
 
-/* home.css - Add this to your styles/home.css file */
-
-:root {
-  --yellow-tint: rgba(245, 222, 179, 0.05);
-  --text-shadow: 0 0 2px rgba(240, 240, 200, 0.7);
-  --glitch-shadow: 0 0 3px rgba(255, 0, 0, 0.5), 0 0 5px rgba(72, 72, 255, 0.5);
-}
-
 body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
   font-family: 'Space Mono', monospace;
+  background-color: #000;
 }
 
 .videoo {
@@ -75,8 +68,8 @@ body {
   font-size: 1rem;
   letter-spacing: 0.1em;
   opacity: 0.8;
-  text-shadow: var(--text-shadow);
-  color: rgba(72, 72, 255, 0.5);
+  text-shadow: #fff;
+  color: rgba(255, 255, 255);
 }
 
 .liminal-text-section {
@@ -94,7 +87,6 @@ body {
 .text-container {
   max-width: 80%;
   padding: 2rem;
-  background-color: var(--yellow-tint);
   border: 1px solid rgba(245, 222, 179, 0.1);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -293,27 +285,245 @@ body {
     clip: rect(51px, 9999px, 159px, 0);
   }
 }
+.dream-memory-section {
+  padding: 20vh 5vw;
+  position: relative;
+  overflow: hidden;
+}
 
 .dream-notes {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
   flex-direction: column;
+  gap: 25vh;
+  position: relative;
 }
 
 .dream-note {
-  width: 50vh;
-  height: 50vh;
-  background-color: #ddc972;
-  font-family: 'Courier New', Courier, monospace;
-  margin: 10%;
+  max-width: 500px;
+  background: rgba(255, 231, 199, 0.1);
+  color: #1c1c1c;
+  animation: float 6s ease-in-out infinite;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 2.5rem;
+  border-radius: 4px;
+  backdrop-filter: blur(10px);
+  font-family: 'EB Garamond', serif;
+  font-size: 1.4rem;
+  line-height: 2.2rem;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  transition: all 1.2s cubic-bezier(0.17, 0.85, 0.438, 0.99);
+  opacity: 0;
+  position: relative;
+  z-index: 10;
+  transform: translateY(50px);
 }
 
-.dream-note .right {
+.dream-note::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    125deg,
+    rgba(255, 255, 255, 0.03),
+    rgba(0, 0, 0, 0)
+  );
+  z-index: -1;
+  border-radius: 4px;
+}
+
+.dream-note.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dream-note.left {
+  align-self: flex-start;
+  border-left: 3px solid rgb(0, 0, 0);
+}
+
+.dream-note.right {
+  align-self: flex-end;
+  border-right: 3px solid rgba(0, 0, 0);
+}
+
+.dream-note:hover {
+  transform: scale(1.03) translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+}
+
+.dream-note p {
+  margin: 0;
+  position: relative;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.dream-note .dream-date {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  margin-top: 1.5rem;
+  font-style: italic;
+  letter-spacing: 0.05em;
   text-align: right;
 }
 
-.dream-note .left {
-  text-align: left;
+.dream-note-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  margin-bottom: 1.2rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+}
+
+.dream-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 3px;
+  height: 3px;
+  pointer-events: none;
+  opacity: 0;
+  animation: float-particle 15s infinite linear;
+}
+
+@keyframes float-particle {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Add a glow effect */
+.dream-notes::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100vh;
+  height: 100vh;
+  background: radial-gradient(
+    circle,
+    rgba(72, 72, 255, 0.05) 0%,
+    rgba(255, 72, 72, 0.05) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  opacity: 0.3;
+  pointer-events: none;
+  filter: blur(50px);
+  z-index: 0;
+}
+
+/* Memory trails effect */
+.memory-trail {
+  position: absolute;
+  width: 1px;
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0)
+  );
+  height: 100px;
+  opacity: 0;
+  z-index: 3;
+}
+
+.memory-trail.visible {
+  animation: trail-fade 8s ease-out forwards;
+}
+
+@keyframes trail-fade {
+  0% {
+    opacity: 0;
+    height: 0;
+  }
+  20% {
+    opacity: 0.5;
+  }
+  80% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0;
+    height: 300px;
+  }
+}
+
+/* Dream section heading */
+.dream-section-heading {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3rem;
+  text-align: center;
+  color: rgba(240, 240, 230, 0.7);
+  margin-bottom: 15vh;
+  letter-spacing: 0.5em;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 1.5s ease;
+}
+
+.dream-section-heading.visible {
+  opacity: 0.7;
+  transform: translateY(0);
+}
+
+.dream-section-heading::after {
+  content: '';
+  display: block;
+  width: 150px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  margin: 2rem auto;
+}
+
+.final-pop-text {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  z-index: 9999;
+  opacity: 0;
+  transform: translateY(100px);
+}
+
+.final-message {
+  font-family: 'Orbitron', sans-serif;
+  margin: 5%;
+  font-size: 2.5rem;
+}
+
+.final-span {
+  border-bottom: 2px solid rgb(173, 158, 56);
+  cursor: pointer;
+}
+.final-span:hover {
+  opacity: 0.4;
 }
