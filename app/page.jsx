@@ -5,6 +5,7 @@ import '@/styles/home.css';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import Progressbar from '@/components/Progressbar';
 
 const quotes = [
   "They remember you. Even though you've never been here.",
@@ -257,7 +258,6 @@ const Home = () => {
 
         section.appendChild(trail);
 
-        // Trigger animation
         setTimeout(() => {
           trail.classList.add('visible');
 
@@ -297,271 +297,275 @@ const Home = () => {
   };
 
   return (
-    <div style={{ position: 'relative' }}>
-      <video ref={videoRef} className="videoo">
-        <source src="/output1.mp4" type="video/mp4" />
-      </video>
+    <>
+      <Progressbar />
+      <div style={{ position: 'relative' }}>
+        <video ref={videoRef} className="videoo">
+          <source src="/output1.mp4" type="video/mp4" />
+        </video>
 
-      <div className="noise-overlay"></div>
+        <div className="noise-overlay"></div>
 
-      <div
-        className="scrollContent"
-        style={{ height: '8000vh', position: 'relative', zIndex: 1 }}
-      >
-        <div style={{ position: 'relative' }}>
-          <img
-            src="/backrooms.jpeg"
-            alt=""
-            style={{ height: '100vh', width: '100%', objectFit: 'cover' }}
-          />
-          <div className={`hero-text ${glitchActive ? 'glitch' : ''}`}>
-            <h1 className="liminal-title">LIMINALITY.</h1>
-            <p className="liminal-subtitle">
-              A Tiny Website in this Corner of the Internet by Amey.
-            </p>
-          </div>
-        </div>
-        <section
-          style={{ backgroundColor: 'transparent', height: '400vh' }}
-        ></section>
-        <section ref={slowSectionRef} className="liminal-text-section">
-          <div
-            className={`text-container ${glitchActive ? 'text-glitch' : ''}`}
-          >
-            <h1 className="liminal-heading">Neither here, nor there.</h1>
-            <p className="liminal-paragraph">
-              Liminal spaces are the transitory places we often pass through,
-              including stairwells, doorways, school hallways at night, empty
-              malls. Yet, unlike normal spaces, they invoke a strong sense of
-              emotion within oneself. They exist on the edge of familiarity and
-              dreams, evoking feelings of nostalgia, unease, and stillness.{' '}
-              <br /> <br />
-              The word liminal comes from the Latin limen, meaning "threshold."
-              These spaces are thresholds, not quite one place or another, but
-              somewhere in between. They often appear empty or abandoned, yet
-              strangely familiar, as if you've seen them in a dream or memory.
-            </p>
-          </div>
-        </section>
-        <section className="floating-text-section">
-          <h2 className="floating-text">
-            Many pass through, but only few truly see it..
-          </h2>
-        </section>
-        <section style={{ height: '100vh' }}></section>
-        <section ref={slowSectionRef} className="liminal-text-section">
-          <div
-            className={`text-container ${glitchActive ? 'text-glitch' : ''}`}
-          >
-            <h1 className="liminal-heading">Surreality. Fear. Unease.</h1>
-            <p className="liminal-paragraph">
-              Liminality isn't always obvious, it is a feeling that creeps in
-              quietly. It is the echo of forgotten places, the eerie stillness
-              of a memory you can't quite place. It stirs something deep: old
-              forgotten dreams, distant childhood moments, emotions without
-              names. Not everyone notices it. But once you do, it stays with
-              you.
-              <br /> <br /> Liminal spaces feel off because they are in-between
-              places. They aren't meant to be destinations — just paths. But
-              when they're empty or frozen in time, your brain doesn't know how
-              to process them. That's where the unease, nostalgia, and surreal
-              feeling comes from.
-            </p>
-          </div>
-        </section>
-        <section style={{ height: '300vh' }}></section>
-        <section
-          ref={slowSectionRef}
-          className="liminal-text-section"
-          style={{ height: '200vh' }}
+        <div
+          className="scrollContent"
+          style={{ height: '8000vh', position: 'relative', zIndex: 1 }}
         >
-          <div
-            className={`text-container ${glitchActive ? 'text-glitch' : ''}`}
+          <div style={{ position: 'relative' }}>
+            <img
+              src="/backrooms.jpeg"
+              alt=""
+              style={{ height: '100vh', width: '100%', objectFit: 'cover' }}
+            />
+            <div className={`hero-text ${glitchActive ? 'glitch' : ''}`}>
+              <h1 className="liminal-title">LIMINALITY.</h1>
+              <p className="liminal-subtitle">
+                A Tiny Website in this Corner of the Internet by Amey.
+              </p>
+            </div>
+          </div>
+          <section
+            style={{ backgroundColor: 'transparent', height: '400vh' }}
+          ></section>
+          <section ref={slowSectionRef} className="liminal-text-section">
+            <div
+              className={`text-container ${glitchActive ? 'text-glitch' : ''}`}
+            >
+              <h1 className="liminal-heading">Neither here, nor there.</h1>
+              <p className="liminal-paragraph">
+                Liminal spaces are the transitory places we often pass through,
+                including stairwells, doorways, school hallways at night, empty
+                malls. Yet, unlike normal spaces, they invoke a strong sense of
+                emotion within oneself. They exist on the edge of familiarity
+                and dreams, evoking feelings of nostalgia, unease, and
+                stillness. <br /> <br />
+                The word liminal comes from the Latin limen, meaning
+                "threshold." These spaces are thresholds, not quite one place or
+                another, but somewhere in between. They often appear empty or
+                abandoned, yet strangely familiar, as if you've seen them in a
+                dream or memory.
+              </p>
+            </div>
+          </section>
+          <section className="floating-text-section">
+            <h2 className="floating-text">
+              Many pass through, but only few truly see it..
+            </h2>
+          </section>
+          <section style={{ height: '100vh' }}></section>
+          <section ref={slowSectionRef} className="liminal-text-section">
+            <div
+              className={`text-container ${glitchActive ? 'text-glitch' : ''}`}
+            >
+              <h1 className="liminal-heading">Surreality. Fear. Unease.</h1>
+              <p className="liminal-paragraph">
+                Liminality isn't always obvious, it is a feeling that creeps in
+                quietly. It is the echo of forgotten places, the eerie stillness
+                of a memory you can't quite place. It stirs something deep: old
+                forgotten dreams, distant childhood moments, emotions without
+                names. Not everyone notices it. But once you do, it stays with
+                you.
+                <br /> <br /> Liminal spaces feel off because they are
+                in-between places. They aren't meant to be destinations — just
+                paths. But when they're empty or frozen in time, your brain
+                doesn't know how to process them. That's where the unease,
+                nostalgia, and surreal feeling comes from.
+              </p>
+            </div>
+          </section>
+          <section style={{ height: '300vh' }}></section>
+          <section
+            ref={slowSectionRef}
+            className="liminal-text-section"
+            style={{ height: '200vh' }}
+          >
+            <div
+              className={`text-container ${glitchActive ? 'text-glitch' : ''}`}
+              ref={slowSectionRef}
+            >
+              <h1 className="liminal-heading">Think about it...</h1>
+              <p className="liminal-paragraph">
+                Imagine standing in your childhood nursery. You remember it all:
+                the laughter, the chaos, the voices of children and teachers
+                echoing through the air. It was alive, bursting with noise and
+                movement. Now, imagine walking back in — years later. The
+                classroom is abandoned, dark, silent. Frozen in time. The things
+                are still there, but the souls are gone. The voices are gone.
+                Everything has moved on — the sounds, the people, the energy.
+                What's left is a shell. Familiar, but hollow.
+                <br /> <br /> That quiet unease you feel? That's liminality.
+              </p>{' '}
+            </div>
+          </section>
+          <section style={{ height: '350vh' }}></section>
+          <section>
+            {' '}
+            <img src="pic4.webp" alt="" className="liminal-photo" />
+            <img src="pic2.jpg" alt="" className="liminal-photo" />
+            <img src="pic3.webp" alt="" className="liminal-photo" />
+            <img src="pic5.webp" alt="" className="liminal-photo" />
+          </section>
+          <section style={{ height: '300vh' }}></section>
+          <section
+            ref={slowSectionRef}
+            className="liminal-text-section"
+            style={{ height: '200vh' }}
+          >
+            <div
+              className={`text-container ${glitchActive ? 'text-glitch' : ''}`}
+            >
+              <h1 className="liminal-heading">Liminal Comfort...?</h1>
+              <p className="liminal-paragraph">
+                Not everyone fears liminal spaces. For some, these quiet,
+                in-between places are a form of sanctuary. They find comfort in
+                the stillness, in the soft hum of fluorescent lights, in the
+                untouched dust of an empty hallway, in the silence of a room
+                long forgotten. These spaces do not demand, they do not rush.
+                They simply exist.
+                <br />
+                <br />
+                Here, time doesn't push you forward. Expectations fade. You are
+                no one and nowhere here. For those who find the world too loud,
+                too sharp, too real...liminal places offer a pause. A breath
+                between chapters. A place to disappear, gently.
+                <br />
+                <br />
+                It's not about being lost. It's about being free, in the
+                briefest of moments, from everything else.
+              </p>{' '}
+            </div>
+          </section>
+          <section style={{ height: '150vh' }}></section>
+          {quotes.map((quote) => {
+            return (
+              <section
+                ref={slowSectionRef}
+                className="floating-text-section"
+                key={quote}
+              >
+                <h2 className="floating-text">{quote}</h2>
+              </section>
+            );
+          })}{' '}
+          <section style={{ height: '500vh' }}></section>
+          <section ref={dreamSectionRef} className="dream-memory-section">
+            <h2 className="dream-section-heading">DREAM FRAGMENTS</h2>
+            <div className="dream-notes">
+              {dreamNotes.map((note, index) => (
+                <div className={`dream-note ${note.position}`} key={index}>
+                  <div className="dream-note-title">{note.title}</div>
+                  <p>{note.content}</p>
+                  <div className="dream-date">{note.date}</div>
+                </div>
+              ))}
+            </div>
+          </section>
+          <section style={{ height: '300vh' }}></section>
+          <section className="final-text-section" style={{ height: '100vh' }}>
+            <div className="final-pop-text floating-text">
+              Are you truly alone, though?
+            </div>
+          </section>
+          <section
+            ref={slowSectionRef}
+            className="liminal-text-section"
+            style={{ height: '200vh' }}
+          >
+            <div
+              className={`text-container ${glitchActive ? 'text-glitch' : ''}`}
+            >
+              <h1 className="liminal-heading">Existence of Other Entities?</h1>
+              <p className="liminal-paragraph">
+                What exactly is the fear we feel in liminal spaces? It isn't the
+                fear of some visible entity. Rather, it's deeper, more primal.
+                These places were once alive, buzzing with footsteps, echoes of
+                laughter, the warmth of presence. Now they stand still, stripped
+                of context, abandoned by time.
+                <br /> <br />
+                It is not what we see that unnerves us, but what we expect to
+                see and don't. Our minds fill the silence with whispers, with
+                figures that don't exist (or shouldn't). The fear is born from
+                the unnatural emptiness, the wrongness of familiarity turned
+                hollow. These spaces aren't haunted by beings...they're haunted
+                by absence. The true 'fear' we feel is not of any unnatural
+                entity. Rather, it is the idea, of liminality itself...
+              </p>
+            </div>
+          </section>
+          <section style={{ height: '100vh' }}></section>
+          <section
+            className="final-text-section"
+            style={{ height: '100vh' }}
             ref={slowSectionRef}
           >
-            <h1 className="liminal-heading">Think about it...</h1>
-            <p className="liminal-paragraph">
-              Imagine standing in your childhood nursery. You remember it all:
-              the laughter, the chaos, the voices of children and teachers
-              echoing through the air. It was alive, bursting with noise and
-              movement. Now, imagine walking back in — years later. The
-              classroom is abandoned, dark, silent. Frozen in time. The things
-              are still there, but the souls are gone. The voices are gone.
-              Everything has moved on — the sounds, the people, the energy.
-              What's left is a shell. Familiar, but hollow.
-              <br /> <br /> That quiet unease you feel? That's liminality.
-            </p>{' '}
-          </div>
-        </section>
-        <section style={{ height: '350vh' }}></section>
-        <section>
-          {' '}
-          <img src="pic4.webp" alt="" className="liminal-photo" />
-          <img src="pic2.jpg" alt="" className="liminal-photo" />
-          <img src="pic3.webp" alt="" className="liminal-photo" />
-          <img src="pic5.webp" alt="" className="liminal-photo" />
-        </section>
-        <section style={{ height: '300vh' }}></section>
-        <section
-          ref={slowSectionRef}
-          className="liminal-text-section"
-          style={{ height: '200vh' }}
-        >
-          <div
-            className={`text-container ${glitchActive ? 'text-glitch' : ''}`}
+            <div className="final-pop-text floating-text">
+              It is not empty. It is merely waiting...
+            </div>
+          </section>
+          <section
+            ref={slowSectionRef}
+            className="liminal-text-section"
+            style={{ height: '200vh' }}
           >
-            <h1 className="liminal-heading">Liminal Comfort...?</h1>
-            <p className="liminal-paragraph">
-              Not everyone fears liminal spaces. For some, these quiet,
-              in-between places are a form of sanctuary. They find comfort in
-              the stillness, in the soft hum of fluorescent lights, in the
-              untouched dust of an empty hallway, in the silence of a room long
-              forgotten. These spaces do not demand, they do not rush. They
-              simply exist.
-              <br />
-              <br />
-              Here, time doesn't push you forward. Expectations fade. You are no
-              one and nowhere here. For those who find the world too loud, too
-              sharp, too real...liminal places offer a pause. A breath between
-              chapters. A place to disappear, gently.
-              <br />
-              <br />
-              It's not about being lost. It's about being free, in the briefest
-              of moments, from everything else.
-            </p>{' '}
-          </div>
-        </section>
-        <section style={{ height: '150vh' }}></section>
-        {quotes.map((quote) => {
-          return (
-            <section
-              ref={slowSectionRef}
-              className="floating-text-section"
-              key={quote}
+            <div
+              className={`text-container ${glitchActive ? 'text-glitch' : ''}`}
             >
-              <h2 className="floating-text">{quote}</h2>
-            </section>
-          );
-        })}{' '}
-        <section style={{ height: '500vh' }}></section>
-        <section ref={dreamSectionRef} className="dream-memory-section">
-          <h2 className="dream-section-heading">DREAM FRAGMENTS</h2>
-          <div className="dream-notes">
-            {dreamNotes.map((note, index) => (
-              <div className={`dream-note ${note.position}`} key={index}>
-                <div className="dream-note-title">{note.title}</div>
-                <p>{note.content}</p>
-                <div className="dream-date">{note.date}</div>
-              </div>
-            ))}
-          </div>
-        </section>
-        <section style={{ height: '300vh' }}></section>
-        <section className="final-text-section" style={{ height: '100vh' }}>
-          <div className="final-pop-text floating-text">
-            Are you truly alone, though?
-          </div>
-        </section>
-        <section
-          ref={slowSectionRef}
-          className="liminal-text-section"
-          style={{ height: '200vh' }}
-        >
-          <div
-            className={`text-container ${glitchActive ? 'text-glitch' : ''}`}
+              <h1 className="liminal-heading">Liminal Existence.</h1>
+              <p className="liminal-paragraph">
+                What if...life in itself is liminal? What if the universe is
+                liminal? What if everything, we see and percieve, is nothing but
+                a transitory reality, bridging the gaps between something much
+                greater, much more enigmatic? <br /> <br />
+                Life is, after all, a bridge between birth and death. A
+                momentary journey between two unknowns. What came before? And
+                what is going to come after? Alas, we'll never know. For now,
+                we're the ones who are suspended in the space between...
+              </p>
+            </div>
+          </section>
+          <section style={{ height: '700vh' }}></section>
+          <section
+            className="final-text-section"
+            style={{ height: '100vh' }}
+            ref={slowSectionRef}
           >
-            <h1 className="liminal-heading">Existence of Other Entities?</h1>
-            <p className="liminal-paragraph">
-              What exactly is the fear we feel in liminal spaces? It isn't the
-              fear of some visible entity. Rather, it's deeper, more primal.
-              These places were once alive, buzzing with footsteps, echoes of
-              laughter, the warmth of presence. Now they stand still, stripped
-              of context, abandoned by time.
-              <br /> <br />
-              It is not what we see that unnerves us, but what we expect to see
-              and don't. Our minds fill the silence with whispers, with figures
-              that don't exist (or shouldn't). The fear is born from the
-              unnatural emptiness, the wrongness of familiarity turned hollow.
-              These spaces aren't haunted by beings...they're haunted by
-              absence. The true 'fear' we feel is not of any unnatural entity.
-              Rather, it is the idea, of liminality itself...
-            </p>
-          </div>
-        </section>
-        <section style={{ height: '100vh' }}></section>
-        <section
-          className="final-text-section"
-          style={{ height: '100vh' }}
-          ref={slowSectionRef}
-        >
-          <div className="final-pop-text floating-text">
-            It is not empty. It is merely waiting...
-          </div>
-        </section>
-        <section
-          ref={slowSectionRef}
-          className="liminal-text-section"
-          style={{ height: '200vh' }}
-        >
-          <div
-            className={`text-container ${glitchActive ? 'text-glitch' : ''}`}
+            <div className="final-pop-text floating-text">
+              You are not alone now. But when you are truly alone, you will feel
+              it: a silence so profound, it will echo through your very being.
+            </div>
+          </section>
+          <section
+            ref={finalSectionRef}
+            className="final-section"
+            style={{
+              height: '100vh',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#fff',
+              background: 'rgba(0, 0, 0, 0.5)',
+              position: 'sticky',
+              bottom: 0,
+              width: '100%',
+              zIndex: 10,
+            }}
           >
-            <h1 className="liminal-heading">Liminal Existence.</h1>
-            <p className="liminal-paragraph">
-              What if...life in itself is liminal? What if the universe is
-              liminal? What if everything, we see and percieve, is nothing but a
-              transitory reality, bridging the gaps between something much
-              greater, much more enigmatic? <br /> <br />
-              Life is, after all, a bridge between birth and death. A momentary
-              journey between two unknowns. What came before? And what is going
-              to come after? Alas, we'll never know. For now, we're the ones who
-              are suspended in the space between...
+            <h2 className="final-message">The End Is Just Another Beginning</h2>
+            <p>
+              Check out some other cool stuff of mine{' '}
+              <underline>
+                <span
+                  className="final-span"
+                  onClick={() => window.open('https://ameyvijeesh.netlify.app')}
+                >
+                  here
+                </span>
+              </underline>
             </p>
-          </div>
-        </section>
-        <section style={{ height: '700vh' }}></section>
-        <section
-          className="final-text-section"
-          style={{ height: '100vh' }}
-          ref={slowSectionRef}
-        >
-          <div className="final-pop-text floating-text">
-            You are not alone now. But when you are truly alone, you will feel
-            it: a silence so profound, it will echo through your very being.
-          </div>
-        </section>
-        <section
-          ref={finalSectionRef}
-          className="final-section"
-          style={{
-            height: '100vh',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#fff',
-            background: 'rgba(0, 0, 0, 0.5)',
-            position: 'sticky',
-            bottom: 0,
-            width: '100%',
-            zIndex: 10,
-          }}
-        >
-          <h2 className="final-message">The End Is Just Another Beginning</h2>
-          <p>
-            Check out some other cool stuff of mine{' '}
-            <underline>
-              <span
-                className="final-span"
-                onClick={() => window.open('https://ameyvijeesh.netlify.app')}
-              >
-                here
-              </span>
-            </underline>
-          </p>
-        </section>
+          </section>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

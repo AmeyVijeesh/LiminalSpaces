@@ -18,6 +18,20 @@ body {
   background-color: #000;
 }
 
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: 'Space Mono', monospace;
+  background-color: #000;
+
+  scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
 .videoo {
   position: fixed;
   top: 0;
@@ -525,4 +539,19 @@ body {
 }
 .final-span:hover {
   opacity: 0.4;
+}
+
+.progress-bar {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.1);
+  height: 5px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9998;
+}
+.progress-fill {
+  background-color: rgb(255, 0, 0);
+  height: 100%;
+  transition: width 0.2s ease;
 }
