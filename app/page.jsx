@@ -6,6 +6,7 @@ import Lenis from 'lenis';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import Progressbar from '@/components/Progressbar';
+import ReactAudioPlayer from 'react-audio-player';
 
 const quotes = [
   "They remember you. Even though you've never been here.",
@@ -59,6 +60,8 @@ const Home = () => {
   const animationFrameRef = useRef(null);
   const [glitchActive, setGlitchActive] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(0);
+  const audioRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     const lenis = new Lenis({ smooth: true, lerp: 0.1 });
@@ -296,9 +299,26 @@ const Home = () => {
     }
   };
 
+  const handlePlay = () => {
+    audioRef.current
+      .play()
+      .then(() => {
+        setIsPlaying(true);
+      })
+      .catch((err) => {
+        console.error('Failed to play audio:', err);
+      });
+  };
+
   return (
     <>
       <Progressbar />
+      {!isPlaying && (
+        <button onClick={handlePlay}>Click to Enable Background Music</button>
+      )}
+      <audio loop autoPlay={true} ref={audioRef}>
+        <source src="/audio.mp3" type="audio/mpeg" />
+      </audio>
       <div style={{ position: 'relative' }}>
         <video ref={videoRef} className="videoo">
           <source src="/output1.mp4" type="video/mp4" />
