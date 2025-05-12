@@ -6,7 +6,6 @@ import Lenis from 'lenis';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import Progressbar from '@/components/Progressbar';
-import ReactAudioPlayer from 'react-audio-player';
 
 const quotes = [
   "They remember you. Even though you've never been here.",
@@ -62,6 +61,11 @@ const Home = () => {
   const [quoteIndex, setQuoteIndex] = useState(0);
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  const cursorRef = useRef(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [showText, setShowText] = useState(true);
+  const [cursorText, setCursorText] = useState('Click anywhere to dismiss');
 
   useEffect(() => {
     const lenis = new Lenis({ smooth: true, lerp: 0.1 });
@@ -223,6 +227,12 @@ const Home = () => {
       }
     };
 
+    // Custom cursor tracking
+    const handleMouseMove = (e) => {
+      setCursorPosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
     adjustFinalSection();
     window.addEventListener('resize', adjustFinalSection);
 
@@ -232,9 +242,47 @@ const Home = () => {
       cancelAnimationFrame(animationFrameRef.current);
       clearInterval(glitchInterval);
       window.removeEventListener('resize', adjustFinalSection);
+      window.removeEventListener('mousemove', handleMouseMove);
       lenis.destroy();
     };
   }, []);
+
+  // Track mouse movement
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    const handleClick = () => {
+      setShowText(false);
+    };
+
+    // Add event listeners
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('click', handleClick);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('click', handleClick);
+    };
+  }, []);
+
+  const resetDemo = () => {
+    setShowText(true);
+  };
+
+  const handleTextChange = (e) => {
+    setCursorText(e.target.value);
+  };
+
+  // Update cursor position
+  useEffect(() => {
+    if (cursorRef.current) {
+      cursorRef.current.style.left = `${cursorPosition.x}px`;
+      cursorRef.current.style.top = `${cursorPosition.y}px`;
+    }
+  }, [cursorPosition]);
 
   const createMemoryTrail = (noteElement) => {
     const position = noteElement.classList.contains('left') ? 'right' : 'left';
@@ -299,27 +347,32 @@ const Home = () => {
     }
   };
 
-  const handlePlay = () => {
-    audioRef.current
-      .play()
-      .then(() => {
-        setIsPlaying(true);
-      })
-      .catch((err) => {
-        console.error('Failed to play audio:', err);
-      });
+  const handlePlayAudio = () => {
+    if (!isPlaying && audioRef.current) {
+      audioRef.current
+        .play()
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch((err) => {
+          console.error('Failed to play audio:', err);
+        });
+    }
   };
 
   return (
     <>
       <Progressbar />
-      {!isPlaying && (
-        <button onClick={handlePlay}>Click to Enable Background Music</button>
-      )}
-      <audio loop autoPlay={true} ref={audioRef}>
+      <audio loop ref={audioRef} preload="auto">
         <source src="/audio.mp3" type="audio/mpeg" />
       </audio>
-      <div style={{ position: 'relative' }}>
+      <div
+        ref={cursorRef}
+        className={`custom-cursor ${isPlaying ? '' : 'music-cursor'}`}
+        onClick={handlePlayAudio}
+      ></div>
+
+      <div style={{ position: 'relative' }} onClick={handlePlayAudio}>
         <video ref={videoRef} className="videoo">
           <source src="/output1.mp4" type="video/mp4" />
         </video>
