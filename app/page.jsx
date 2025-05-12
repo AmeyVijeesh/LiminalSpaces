@@ -69,12 +69,41 @@ const Home = () => {
   const [showText, setShowText] = useState(false);
   const [loading, setLoading] = useState(true);
   const [videoLoaded, setVideoLoaded] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
 
   useEffect(() => {
     const video = videoRef.current;
 
+    const handleVideoProgress = (e) => {
+      if (video) {
+        try {
+          // Check if the video has buffered data
+          const buffered = video.buffered;
+          if (buffered.length > 0) {
+            // Calculate the percentage of video loaded
+            const loadedEnd = buffered.end(buffered.length - 1);
+            const total = video.duration || 1; // Prevent division by zero
+            const percentLoaded = Math.min(
+              Math.round((loadedEnd / total) * 100),
+              100
+            );
+
+            setLoadingProgress(percentLoaded);
+
+            // If fully loaded, set video loaded state
+            if (percentLoaded === 100) {
+              setVideoLoaded(true);
+            }
+          }
+        } catch (error) {
+          console.error('Video progress tracking error:', error);
+        }
+      }
+    };
+
     const handleVideoLoaded = () => {
       setVideoLoaded(true);
+      setLoadingProgress(100);
     };
 
     const handleVideoError = (error) => {
@@ -87,7 +116,8 @@ const Home = () => {
     };
 
     if (video) {
-      // Add event listeners for video loading
+      // Add event listeners for video loading progress
+      video.addEventListener('progress', handleVideoProgress);
       video.addEventListener('loadedmetadata', handleVideoLoaded);
       video.addEventListener('canplaythrough', handleVideoLoaded);
       video.addEventListener('error', handleVideoError);
@@ -95,6 +125,7 @@ const Home = () => {
       // Check if video is already loaded
       if (video.readyState >= 2) {
         setVideoLoaded(true);
+        setLoadingProgress(100);
       }
     }
 
@@ -109,6 +140,7 @@ const Home = () => {
 
     return () => {
       if (video) {
+        video.removeEventListener('progress', handleVideoProgress);
         video.removeEventListener('loadedmetadata', handleVideoLoaded);
         video.removeEventListener('canplaythrough', handleVideoLoaded);
         video.removeEventListener('error', handleVideoError);
