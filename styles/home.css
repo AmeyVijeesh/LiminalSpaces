@@ -1,23 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap');
 
-.videoo {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
-  z-index: -1;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  font-family: 'Space Mono', monospace;
-  background-color: #000;
-}
-
 body {
   margin: 0;
   padding: 0;
@@ -554,4 +536,17 @@ body::-webkit-scrollbar {
   background-color: rgb(255, 0, 0);
   height: 100%;
   transition: width 0.2s ease;
+}
+
+.cursor-text {
+  position: fixed;
+  pointer-events: none;
+  background-color: rgba(68, 92, 160, 0.7);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #fff;
+  font-size: 14px;
+  z-index: 1000;
+  white-space: nowrap;
 }

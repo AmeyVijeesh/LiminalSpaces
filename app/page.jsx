@@ -6,6 +6,7 @@ import Lenis from 'lenis';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import Progressbar from '@/components/Progressbar';
+import AnimatedCursor from 'react-animated-cursor';
 
 const quotes = [
   "They remember you. Even though you've never been here.",
@@ -65,7 +66,6 @@ const Home = () => {
   const cursorRef = useRef(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [showText, setShowText] = useState(true);
-  const [cursorText, setCursorText] = useState('Click anywhere to dismiss');
 
   useEffect(() => {
     const lenis = new Lenis({ smooth: true, lerp: 0.1 });
@@ -177,7 +177,6 @@ const Home = () => {
       createDreamParticles();
     }
 
-    // Animate final text section
     gsap.fromTo(
       '.final-pop-text',
       { opacity: 0, y: 100 },
@@ -194,7 +193,6 @@ const Home = () => {
       }
     );
 
-    // Animate the final message
     if (finalSectionRef.current) {
       gsap.fromTo(
         '.final-message',
@@ -213,11 +211,9 @@ const Home = () => {
       );
     }
 
-    // Calculate total scroll height and set final section position
     const adjustFinalSection = () => {
       const scrollContent = document.querySelector('.scrollContent');
       if (scrollContent && finalSectionRef.current) {
-        // Make sure the final section is positioned at the end
         const totalHeight = parseInt(scrollContent.style.height);
         const viewportHeight = window.innerHeight;
         finalSectionRef.current.style.position = 'absolute';
@@ -227,7 +223,6 @@ const Home = () => {
       }
     };
 
-    // Custom cursor tracking
     const handleMouseMove = (e) => {
       setCursorPosition({ x: e.clientX, y: e.clientY });
     };
@@ -257,26 +252,15 @@ const Home = () => {
       setShowText(false);
     };
 
-    // Add event listeners
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('click', handleClick);
 
-    // Cleanup
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('click', handleClick);
     };
   }, []);
 
-  const resetDemo = () => {
-    setShowText(true);
-  };
-
-  const handleTextChange = (e) => {
-    setCursorText(e.target.value);
-  };
-
-  // Update cursor position
   useEffect(() => {
     if (cursorRef.current) {
       cursorRef.current.style.left = `${cursorPosition.x}px`;
@@ -362,7 +346,31 @@ const Home = () => {
 
   return (
     <>
+      <AnimatedCursor
+        innerSize={8}
+        outerSize={20} // Increase outerSize for better visibility
+        color="255, 255, 255"
+        outerAlpha={0.5} // Increase opacity to make the outer ring visible
+        innerScale={0.7}
+        outerScale={5}
+      />
+
       <Progressbar />
+      <div>
+        <div>
+          {showText && (
+            <div
+              className="cursor-text"
+              style={{
+                left: `${mousePosition.x + 15}px`,
+                top: `${mousePosition.y + 15}px`,
+              }}
+            >
+              Click to enable sound
+            </div>
+          )}
+        </div>
+      </div>
       <audio loop ref={audioRef} preload="auto">
         <source src="/audio.mp3" type="audio/mpeg" />
       </audio>
