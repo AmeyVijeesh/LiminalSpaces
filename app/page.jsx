@@ -438,7 +438,7 @@ const Home = () => {
 
   return (
     <>
-      {loading && <Loader />}
+      {loading && <Loader loadingProgress={loadingProgress} />}
       <div>
         <AnimatedCursor
           innerSize={8}
