@@ -68,14 +68,65 @@ const Home = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [showText, setShowText] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-      setShowText(true);
-    }, 5000);
-    return () => clearTimeout(timer);
+    const video = videoRef.current;
+
+    const handleVideoLoaded = () => {
+      setVideoLoaded(true);
+    };
+
+    const handleVideoError = (error) => {
+      console.error('Video loading error:', error);
+      // Fallback to remove loading screen after a timeout
+      setTimeout(() => {
+        setLoading(false);
+        setShowText(true);
+      }, 10000);
+    };
+
+    if (video) {
+      // Add event listeners for video loading
+      video.addEventListener('loadedmetadata', handleVideoLoaded);
+      video.addEventListener('canplaythrough', handleVideoLoaded);
+      video.addEventListener('error', handleVideoError);
+
+      // Check if video is already loaded
+      if (video.readyState >= 2) {
+        setVideoLoaded(true);
+      }
+    }
+
+    // Timeout to ensure loading screen doesn't stay forever
+    const loadingTimeout = setTimeout(() => {
+      if (!videoLoaded) {
+        console.warn('Video loading timed out');
+        setLoading(false);
+        setShowText(true);
+      }
+    }, 10000); // 10 seconds timeout
+
+    return () => {
+      if (video) {
+        video.removeEventListener('loadedmetadata', handleVideoLoaded);
+        video.removeEventListener('canplaythrough', handleVideoLoaded);
+        video.removeEventListener('error', handleVideoError);
+      }
+      clearTimeout(loadingTimeout);
+    };
   }, []);
+
+  useEffect(() => {
+    if (videoLoaded) {
+      const timer = setTimeout(() => {
+        setLoading(false);
+        setShowText(true);
+      }, 1000); // Small delay to ensure smooth transition
+
+      return () => clearTimeout(timer);
+    }
+  }, [videoLoaded]);
 
   useEffect(() => {
     const lenis = new Lenis({ smooth: true, lerp: 0.1 });
