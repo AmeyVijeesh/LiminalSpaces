@@ -77,10 +77,8 @@ const Home = () => {
     const handleVideoProgress = (e) => {
       if (video) {
         try {
-          // Check if the video has buffered data
           const buffered = video.buffered;
           if (buffered.length > 0) {
-            // Calculate the percentage of video loaded
             const loadedEnd = buffered.end(buffered.length - 1);
             const total = video.duration || 1; // Prevent division by zero
             const percentLoaded = Math.min(
@@ -90,7 +88,6 @@ const Home = () => {
 
             setLoadingProgress(percentLoaded);
 
-            // If fully loaded, set video loaded state
             if (percentLoaded === 100) {
               setVideoLoaded(true);
             }
@@ -108,7 +105,6 @@ const Home = () => {
 
     const handleVideoError = (error) => {
       console.error('Video loading error:', error);
-      // Fallback to remove loading screen after a timeout
       setTimeout(() => {
         setLoading(false);
         setShowText(true);
@@ -116,27 +112,24 @@ const Home = () => {
     };
 
     if (video) {
-      // Add event listeners for video loading progress
       video.addEventListener('progress', handleVideoProgress);
       video.addEventListener('loadedmetadata', handleVideoLoaded);
       video.addEventListener('canplaythrough', handleVideoLoaded);
       video.addEventListener('error', handleVideoError);
 
-      // Check if video is already loaded
       if (video.readyState >= 2) {
         setVideoLoaded(true);
         setLoadingProgress(100);
       }
     }
 
-    // Timeout to ensure loading screen doesn't stay forever
     const loadingTimeout = setTimeout(() => {
       if (!videoLoaded) {
         console.warn('Video loading timed out');
         setLoading(false);
         setShowText(true);
       }
-    }, 10000); // 10 seconds timeout
+    }, 10000);
 
     return () => {
       if (video) {
@@ -162,25 +155,61 @@ const Home = () => {
 
   useEffect(() => {
     const lenis = new Lenis({ smooth: true, lerp: 0.1 });
+    let rafId = null;
 
     function raf(time) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
-    requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
 
     const video = videoRef.current;
+    if (!video) return;
+
+    // Make sure the video is loaded
+    video.load();
+
+    // Set to initial state
     video.pause();
 
+    // Function to handle scroll
     const updateVideo = () => {
+      if (video.readyState < 2) return; // Make sure video is ready
+
       const scrollTop = window.scrollY;
       const maxScroll = document.body.scrollHeight - window.innerHeight;
       const scrollFraction = scrollTop / maxScroll;
 
       const duration = video.duration || 1;
-      video.currentTime = scrollFraction * duration;
+      video.currentTime = Math.min(scrollFraction * duration, duration - 0.001);
     };
 
+    // Add error handling for video
+    video.addEventListener('error', (e) => {
+      console.error('Video error:', e);
+      console.error(
+        'Video error code:',
+        video.error ? video.error.code : 'unknown'
+      );
+      console.error(
+        'Video error message:',
+        video.error ? video.error.message : 'unknown'
+      );
+    });
+
+    // Log video path to debug
+    console.log(
+      'Video path:',
+      video.querySelector('source')?.src || 'No source found'
+    );
+
+    // Wait for video to be ready before setting up scroll handler
+    video.addEventListener('loadedmetadata', () => {
+      console.log('Video metadata loaded, duration:', video.duration);
+      updateVideo(); // Initial call
+    });
+
+    // Glitch effect interval
     const glitchInterval = setInterval(() => {
       setGlitchActive(true);
       setTimeout(() => setGlitchActive(false), 150);
@@ -208,6 +237,7 @@ const Home = () => {
       animationFrameRef.current = requestAnimationFrame(animate);
     };
 
+    // Initialize GSAP animations
     gsap.registerPlugin(ScrollTrigger);
 
     const photos = gsap.utils.toArray('.liminal-photo');
@@ -238,19 +268,19 @@ const Home = () => {
           onEnter: () =>
             document
               .querySelector('.dream-section-heading')
-              .classList.add('visible'),
+              ?.classList.add('visible'),
           onLeave: () =>
             document
               .querySelector('.dream-section-heading')
-              .classList.remove('visible'),
+              ?.classList.remove('visible'),
           onEnterBack: () =>
             document
               .querySelector('.dream-section-heading')
-              .classList.add('visible'),
+              ?.classList.add('visible'),
           onLeaveBack: () =>
             document
               .querySelector('.dream-section-heading')
-              .classList.remove('visible'),
+              ?.classList.remove('visible'),
         },
       });
 
@@ -261,13 +291,18 @@ const Home = () => {
             start: 'top 85%',
             onEnter: () => {
               note.classList.add('visible');
-              createMemoryTrail(note);
+              if (typeof createMemoryTrail === 'function') {
+                createMemoryTrail(note);
+              }
             },
           },
         });
       });
 
-      createDreamParticles();
+      // Only call if function exists
+      if (typeof createDreamParticles === 'function') {
+        createDreamParticles();
+      }
     }
 
     gsap.fromTo(
@@ -308,7 +343,6 @@ const Home = () => {
       const scrollContent = document.querySelector('.scrollContent');
       if (scrollContent && finalSectionRef.current) {
         const totalHeight = parseInt(scrollContent.style.height);
-        const viewportHeight = window.innerHeight;
         finalSectionRef.current.style.position = 'absolute';
         finalSectionRef.current.style.bottom = '0';
         finalSectionRef.current.style.width = '100%';
@@ -321,16 +355,24 @@ const Home = () => {
     };
 
     window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('scroll', updateVideo); // Add scroll event listener
     adjustFinalSection();
     window.addEventListener('resize', adjustFinalSection);
 
     animate();
 
+    // Cleanup function
     return () => {
       cancelAnimationFrame(animationFrameRef.current);
+      cancelAnimationFrame(rafId);
       clearInterval(glitchInterval);
       window.removeEventListener('resize', adjustFinalSection);
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('scroll', updateVideo);
+      if (video) {
+        video.removeEventListener('loadedmetadata', updateVideo);
+        video.removeEventListener('error', () => {});
+      }
       lenis.destroy();
     };
   }, []);
