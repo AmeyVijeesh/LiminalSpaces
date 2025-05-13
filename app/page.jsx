@@ -474,7 +474,7 @@ const Home = () => {
         ></div>
         <div style={{ position: 'relative' }} onClick={handlePlayAudio}>
           <video ref={videoRef} className="video">
-            <source src="/output1.mp4" type="video/mp4" />
+            <source src="/output.mp4" type="video/mp4" />
           </video>
 
           <div className="noise-overlay"></div>
