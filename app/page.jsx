@@ -142,6 +142,60 @@ const Home = () => {
     };
   }, []);
 
+  // Add this to your useEffect for debugging
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Debug logger
+    const logVideoState = () => {
+      console.log('=== VIDEO DEBUG ===');
+      console.log('Current time:', video.currentTime);
+      console.log('Duration:', video.duration);
+      console.log('Ready state:', video.readyState);
+      console.log('Paused:', video.paused);
+      console.log('Network state:', video.networkState);
+      console.log('Buffered ranges:', video.buffered.length);
+
+      for (let i = 0; i < video.buffered.length; i++) {
+        console.log(
+          `Buffer ${i}:`,
+          video.buffered.start(i),
+          '-',
+          video.buffered.end(i)
+        );
+      }
+
+      console.log('Scroll position:', window.scrollY);
+      console.log(
+        'Max scroll:',
+        document.body.scrollHeight - window.innerHeight
+      );
+      console.log('==================');
+    };
+
+    // Log every few seconds
+    const debugInterval = setInterval(logVideoState, 3000);
+
+    // Log on scroll issues
+    let lastScrollTime = 0;
+    const debugScroll = () => {
+      const now = Date.now();
+      if (now - lastScrollTime > 100) {
+        // Only log every 100ms
+        console.log('Scroll update attempted');
+        lastScrollTime = now;
+      }
+    };
+
+    window.addEventListener('scroll', debugScroll);
+
+    return () => {
+      clearInterval(debugInterval);
+      window.removeEventListener('scroll', debugScroll);
+    };
+  }, []);
+
   useEffect(() => {
     if (videoLoaded) {
       const timer = setTimeout(() => {
@@ -166,13 +220,10 @@ const Home = () => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Make sure the video is loaded
     video.load();
 
-    // Set to initial state
     video.pause();
 
-    // Function to handle scroll
     const updateVideo = () => {
       if (video.readyState < 2) return; // Make sure video is ready
 
@@ -208,6 +259,20 @@ const Home = () => {
       console.log('Video metadata loaded, duration:', video.duration);
       updateVideo(); // Initial call
     });
+
+    // Add this to debug network issues
+    console.log('Attempting to fetch video directly');
+    fetch('/output.mp4')
+      .then((response) => {
+        console.log(
+          'Video fetch response:',
+          response.status,
+          response.statusText
+        );
+        return response.blob();
+      })
+      .then((blob) => console.log('Video blob loaded, size:', blob.size))
+      .catch((err) => console.error('Video fetch error:', err));
 
     // Glitch effect interval
     const glitchInterval = setInterval(() => {
