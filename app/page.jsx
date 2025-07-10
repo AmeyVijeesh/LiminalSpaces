@@ -7,7 +7,7 @@ import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import Progressbar from '@/components/Progressbar';
 import AnimatedCursor from 'react-animated-cursor';
-import Loader from '@/components/Loader';
+import LoadingScreen from '@/components/Loader';
 
 const quotes = [
   "They remember you. Even though you've never been here.",
@@ -668,29 +668,13 @@ const Home = () => {
     }
   };
 
-  const LoadingScreen = () => (
-    <div className={`loading-screen ${videoFullyLoaded ? 'fade-out' : ''}`}>
-      <div className="loading-content">
-        <div className="loading-spinner">
-          <div className="spinner-circle"></div>
-        </div>
-        <div className="loading-text">
-          <h2>{loadingPhase}</h2>
-          <div className="progress-bar">
-            <div
-              className="progress-fill"
-              style={{ width: `${loadingProgress}%` }}
-            />
-          </div>
-          <p>{loadingProgress.toFixed(1)}% loaded</p>
-        </div>
-      </div>
-    </div>
-  );
-
   return (
     <>
-      <LoadingScreen />
+      <LoadingScreen
+        loadingProgress={loadingProgress}
+        videoFullyLoaded={videoFullyLoaded}
+        loadingPhase={loadingPhase}
+      />
       <div>
         <AnimatedCursor
           innerSize={8}
