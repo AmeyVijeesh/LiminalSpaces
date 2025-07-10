@@ -9,47 +9,7 @@ import Progressbar from '@/components/Progressbar';
 import AnimatedCursor from 'react-animated-cursor';
 import LoadingScreen from '@/components/Loader';
 
-const quotes = [
-  "They remember you. Even though you've never been here.",
-  "It's not the emptiness that hurts — it's the feeling that something used to be here.",
-  'It feels like coming home to a place that never existed.',
-  "It's always 10:35 here. Always.",
-];
-
-const dreamNotes = [
-  {
-    position: 'left',
-    title: 'Memory Fragment',
-    content:
-      'The shouts and laughters of happy children has dissolved, only to be replaced by the echoes of lost memories.',
-    date: 'Lost Memories',
-  },
-  {
-    position: 'right',
-    title: 'Lost Emotions',
-    content:
-      'Abandoned, empty spaces hold more memories and emotion than most people ever could.',
-    date: 'Unknown',
-  },
-  {
-    position: 'left',
-    title: 'Silent Scream',
-    content: 'The silence is louder than the voices beyond the walls.',
-    date: 'The Lost Traveller',
-  },
-  {
-    position: 'right',
-    title: 'Reality Distortion',
-    content: 'Reality gets thin around edges of dreams like this...',
-    date: 'Unknown',
-  },
-  {
-    position: 'left',
-    title: 'Familiar Dreams',
-    content: "You've been here before. But this place has never existed...",
-    date: 'Forgotten Dreams',
-  },
-];
+import { quotes, dreamNotes } from '@/components/textstuff';
 
 const Home = () => {
   const videoRef = useRef(null);
@@ -82,7 +42,7 @@ const Home = () => {
           const buffered = video.buffered;
           if (buffered.length > 0) {
             const loadedEnd = buffered.end(buffered.length - 1);
-            const total = video.duration || 1; // Prevent division by zero
+            const total = video.duration || 1;
             const percentLoaded = Math.min(
               Math.round((loadedEnd / total) * 100),
               100
@@ -148,7 +108,6 @@ const Home = () => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Force aggressive loading
     video.preload = 'auto';
     video.load();
 
@@ -160,7 +119,6 @@ const Home = () => {
 
         setLoadingProgress(progress);
 
-        // Update loading phase messages
         if (progress < 25) {
           setLoadingPhase('Loading video...');
         } else if (progress < 50) {
@@ -176,7 +134,6 @@ const Home = () => {
       }
     };
 
-    // Event listeners for loading progress
     const handleProgress = () => {
       updateLoadingProgress();
     };
@@ -198,10 +155,8 @@ const Home = () => {
       updateLoadingProgress();
     };
 
-    // Force complete buffering
     const forceCompleteLoad = () => {
       if (video.readyState < 4) {
-        // Jump through video to force complete download
         const duration = video.duration || 1;
         const jumpPoints = [0.1, 0.3, 0.5, 0.7, 0.9];
         let currentJump = 0;
@@ -229,26 +184,21 @@ const Home = () => {
       }
     };
 
-    // Add all event listeners
     video.addEventListener('progress', handleProgress);
     video.addEventListener('canplaythrough', handleCanPlayThrough);
     video.addEventListener('loadeddata', handleLoadedData);
     video.addEventListener('loadedmetadata', handleLoadedMetadata);
 
-    // Start loading process
     video.load();
 
-    // Check loading progress every 500ms
     const progressInterval = setInterval(updateLoadingProgress, 500);
 
-    // Force complete load every 2 seconds if not done
     const forceLoadInterval = setInterval(() => {
       if (loadingProgress < 100) {
         forceCompleteLoad();
       }
     }, 2000);
 
-    // Timeout fallback - if video doesn't load in 30 seconds, show anyway
     const loadingTimeout = setTimeout(() => {
       if (!videoFullyLoaded) {
         console.warn('Video loading timeout - showing content anyway');
@@ -291,7 +241,7 @@ const Home = () => {
       const timer = setTimeout(() => {
         setLoading(false);
         setShowText(true);
-      }, 1000); // Small delay to ensure smooth transition
+      }, 1000);
 
       return () => clearTimeout(timer);
     }
@@ -315,7 +265,7 @@ const Home = () => {
     video.pause();
 
     const updateVideo = () => {
-      if (video.readyState < 2) return; // Make sure video is ready
+      if (video.readyState < 2) return;
 
       const scrollTop = window.scrollY;
       const maxScroll = document.body.scrollHeight - window.innerHeight;
@@ -325,7 +275,6 @@ const Home = () => {
       video.currentTime = Math.min(scrollFraction * duration, duration - 0.001);
     };
 
-    // Add error handling for video
     video.addEventListener('error', (e) => {
       console.error('Video error:', e);
       console.error(
@@ -338,19 +287,16 @@ const Home = () => {
       );
     });
 
-    // Log video path to debug
     console.log(
       'Video path:',
       video.querySelector('source')?.src || 'No source found'
     );
 
-    // Wait for video to be ready before setting up scroll handler
     video.addEventListener('loadedmetadata', () => {
       console.log('Video metadata loaded, duration:', video.duration);
-      updateVideo(); // Initial call
+      updateVideo();
     });
 
-    // Add this to debug network issues
     console.log('Attempting to fetch video directly');
     fetch('/output.mp4')
       .then((response) => {
@@ -364,7 +310,6 @@ const Home = () => {
       .then((blob) => console.log('Video blob loaded, size:', blob.size))
       .catch((err) => console.error('Video fetch error:', err));
 
-    // Glitch effect interval
     const glitchInterval = setInterval(() => {
       setGlitchActive(true);
       setTimeout(() => setGlitchActive(false), 150);
@@ -392,7 +337,6 @@ const Home = () => {
       animationFrameRef.current = requestAnimationFrame(animate);
     };
 
-    // Initialize GSAP animations
     gsap.registerPlugin(ScrollTrigger);
 
     const photos = gsap.utils.toArray('.liminal-photo');
@@ -454,7 +398,6 @@ const Home = () => {
         });
       });
 
-      // Only call if function exists
       if (typeof createDreamParticles === 'function') {
         createDreamParticles();
       }
@@ -510,13 +453,12 @@ const Home = () => {
     };
 
     window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('scroll', updateVideo); // Add scroll event listener
+    window.addEventListener('scroll', updateVideo);
     adjustFinalSection();
     window.addEventListener('resize', adjustFinalSection);
 
     animate();
 
-    // Cleanup function
     return () => {
       cancelAnimationFrame(animationFrameRef.current);
       cancelAnimationFrame(rafId);
@@ -563,7 +505,6 @@ const Home = () => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Your existing scroll control logic here
     const updateVideo = () => {
       if (video.readyState < 2) return;
 
@@ -581,10 +522,8 @@ const Home = () => {
       }
     };
 
-    // Add scroll listener
     window.addEventListener('scroll', updateVideo);
 
-    // Initial call
     updateVideo();
 
     return () => {

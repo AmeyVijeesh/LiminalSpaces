@@ -15,7 +15,7 @@ const LoadingScreen = ({ videoFullyLoaded, loadingProgress, loadingPhase }) => (
             style={{ width: `${loadingProgress}%` }}
           />
         </div>
-        <p>{loadingProgress.toFixed(1)}% loaded</p>
+        <p>{loadingProgress.toFixed(1)}% done.</p>
       </div>
     </div>
   </div>
