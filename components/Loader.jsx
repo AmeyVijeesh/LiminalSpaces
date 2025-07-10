@@ -16,6 +16,9 @@ const LoadingScreen = ({ videoFullyLoaded, loadingProgress, loadingPhase }) => (
           />
         </div>
         <p>{loadingProgress.toFixed(1)}% done.</p>
+        <br />
+        <br />
+        <p>Headphones Recommended.</p>
       </div>
     </div>
   </div>
