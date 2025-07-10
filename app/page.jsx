@@ -69,7 +69,9 @@ const Home = () => {
   const [showText, setShowText] = useState(false);
   const [loading, setLoading] = useState(true);
   const [videoLoaded, setVideoLoaded] = useState(false);
+  const [videoFullyLoaded, setVideoFullyLoaded] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
+  const [loadingPhase, setLoadingPhase] = useState('Initializing...');
 
   useEffect(() => {
     const video = videoRef.current;
@@ -142,58 +144,146 @@ const Home = () => {
     };
   }, []);
 
-  // Add this to your useEffect for debugging
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Debug logger
-    const logVideoState = () => {
-      console.log('=== VIDEO DEBUG ===');
-      console.log('Current time:', video.currentTime);
-      console.log('Duration:', video.duration);
-      console.log('Ready state:', video.readyState);
-      console.log('Paused:', video.paused);
-      console.log('Network state:', video.networkState);
-      console.log('Buffered ranges:', video.buffered.length);
+    // Force aggressive loading
+    video.preload = 'auto';
+    video.load();
 
-      for (let i = 0; i < video.buffered.length; i++) {
-        console.log(
-          `Buffer ${i}:`,
-          video.buffered.start(i),
-          '-',
-          video.buffered.end(i)
-        );
-      }
+    const updateLoadingProgress = () => {
+      if (video.buffered.length > 0) {
+        const bufferedEnd = video.buffered.end(video.buffered.length - 1);
+        const duration = video.duration || 1;
+        const progress = Math.min((bufferedEnd / duration) * 100, 100);
 
-      console.log('Scroll position:', window.scrollY);
-      console.log(
-        'Max scroll:',
-        document.body.scrollHeight - window.innerHeight
-      );
-      console.log('==================');
-    };
+        setLoadingProgress(progress);
 
-    // Log every few seconds
-    const debugInterval = setInterval(logVideoState, 3000);
-
-    // Log on scroll issues
-    let lastScrollTime = 0;
-    const debugScroll = () => {
-      const now = Date.now();
-      if (now - lastScrollTime > 100) {
-        // Only log every 100ms
-        console.log('Scroll update attempted');
-        lastScrollTime = now;
+        // Update loading phase messages
+        if (progress < 25) {
+          setLoadingPhase('Loading video...');
+        } else if (progress < 50) {
+          setLoadingPhase('Buffering content...');
+        } else if (progress < 75) {
+          setLoadingPhase('Almost ready...');
+        } else if (progress < 100) {
+          setLoadingPhase('Finalizing...');
+        } else {
+          setLoadingPhase('Ready!');
+          setTimeout(() => setVideoFullyLoaded(true), 500);
+        }
       }
     };
 
-    window.addEventListener('scroll', debugScroll);
+    // Event listeners for loading progress
+    const handleProgress = () => {
+      updateLoadingProgress();
+    };
+
+    const handleCanPlayThrough = () => {
+      console.log('Video can play through completely');
+      setLoadingProgress(100);
+      setLoadingPhase('Ready!');
+      setTimeout(() => setVideoFullyLoaded(true), 500);
+    };
+
+    const handleLoadedData = () => {
+      console.log('Video data loaded');
+      updateLoadingProgress();
+    };
+
+    const handleLoadedMetadata = () => {
+      console.log('Video metadata loaded, duration:', video.duration);
+      updateLoadingProgress();
+    };
+
+    // Force complete buffering
+    const forceCompleteLoad = () => {
+      if (video.readyState < 4) {
+        // Jump through video to force complete download
+        const duration = video.duration || 1;
+        const jumpPoints = [0.1, 0.3, 0.5, 0.7, 0.9];
+        let currentJump = 0;
+
+        const jumpNext = () => {
+          if (currentJump < jumpPoints.length) {
+            try {
+              video.currentTime = jumpPoints[currentJump] * duration;
+              currentJump++;
+              setTimeout(jumpNext, 200);
+            } catch (e) {
+              console.log('Jump failed:', e);
+              currentJump++;
+              setTimeout(jumpNext, 200);
+            }
+          } else {
+            video.currentTime = 0;
+            updateLoadingProgress();
+          }
+        };
+
+        if (video.readyState >= 2) {
+          jumpNext();
+        }
+      }
+    };
+
+    // Add all event listeners
+    video.addEventListener('progress', handleProgress);
+    video.addEventListener('canplaythrough', handleCanPlayThrough);
+    video.addEventListener('loadeddata', handleLoadedData);
+    video.addEventListener('loadedmetadata', handleLoadedMetadata);
+
+    // Start loading process
+    video.load();
+
+    // Check loading progress every 500ms
+    const progressInterval = setInterval(updateLoadingProgress, 500);
+
+    // Force complete load every 2 seconds if not done
+    const forceLoadInterval = setInterval(() => {
+      if (loadingProgress < 100) {
+        forceCompleteLoad();
+      }
+    }, 2000);
+
+    // Timeout fallback - if video doesn't load in 30 seconds, show anyway
+    const loadingTimeout = setTimeout(() => {
+      if (!videoFullyLoaded) {
+        console.warn('Video loading timeout - showing content anyway');
+        setVideoFullyLoaded(true);
+      }
+    }, 30000);
 
     return () => {
-      clearInterval(debugInterval);
-      window.removeEventListener('scroll', debugScroll);
+      clearInterval(progressInterval);
+      clearInterval(forceLoadInterval);
+      clearTimeout(loadingTimeout);
+      video.removeEventListener('progress', handleProgress);
+      video.removeEventListener('canplaythrough', handleCanPlayThrough);
+      video.removeEventListener('loadeddata', handleLoadedData);
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
     };
+  }, []);
+
+  useEffect(() => {
+    const preloadVideo = async () => {
+      try {
+        const response = await fetch('/output.mp4');
+        const blob = await response.blob();
+        const videoUrl = URL.createObjectURL(blob);
+
+        if (videoRef.current) {
+          videoRef.current.src = videoUrl;
+          console.log('Video fully downloaded');
+        }
+      } catch (error) {
+        console.error('Failed to preload video:', error);
+      }
+    };
+
+    preloadVideo();
   }, []);
 
   useEffect(() => {
@@ -467,6 +557,41 @@ const Home = () => {
     }
   }, [cursorPosition]);
 
+  useEffect(() => {
+    if (!videoFullyLoaded) return;
+
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Your existing scroll control logic here
+    const updateVideo = () => {
+      if (video.readyState < 2) return;
+
+      const scrollTop = window.scrollY;
+      const maxScroll = document.body.scrollHeight - window.innerHeight;
+      const scrollFraction = Math.min(Math.max(scrollTop / maxScroll, 0), 1);
+
+      const duration = video.duration || 1;
+      const targetTime = Math.min(scrollFraction * duration, duration - 0.1);
+
+      try {
+        video.currentTime = targetTime;
+      } catch (error) {
+        console.error('Error setting video time:', error);
+      }
+    };
+
+    // Add scroll listener
+    window.addEventListener('scroll', updateVideo);
+
+    // Initial call
+    updateVideo();
+
+    return () => {
+      window.removeEventListener('scroll', updateVideo);
+    };
+  }, [videoFullyLoaded]);
+
   const createMemoryTrail = (noteElement) => {
     const position = noteElement.classList.contains('left') ? 'right' : 'left';
     const trailsCount = Math.floor(Math.random() * 3) + 2;
@@ -543,9 +668,29 @@ const Home = () => {
     }
   };
 
+  const LoadingScreen = () => (
+    <div className={`loading-screen ${videoFullyLoaded ? 'fade-out' : ''}`}>
+      <div className="loading-content">
+        <div className="loading-spinner">
+          <div className="spinner-circle"></div>
+        </div>
+        <div className="loading-text">
+          <h2>{loadingPhase}</h2>
+          <div className="progress-bar">
+            <div
+              className="progress-fill"
+              style={{ width: `${loadingProgress}%` }}
+            />
+          </div>
+          <p>{loadingProgress.toFixed(1)}% loaded</p>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <>
-      {loading && <Loader loadingProgress={loadingProgress} />}
+      <LoadingScreen />
       <div>
         <AnimatedCursor
           innerSize={8}
